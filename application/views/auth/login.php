@@ -25,7 +25,8 @@ $this->load->view('template/head');
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <b>SIAP</b>
+    <b>SIAP</b><br>
+    <h5>Sistem Informasi dan Administrasi Pemeriksaan</h5>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">

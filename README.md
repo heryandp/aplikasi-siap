@@ -10,9 +10,10 @@ Fungsi aplikasi:
 Fitur aplikasi:
 - Manajemen user
 
-//Kontak
+Kontak
 heryandwiyoga@gmail.com
 
-//Screenshots
+Screenshots
+
 Login Form
 ![Login Form](https://raw.githubusercontent.com/heryandp/aplikasi-siap/master/docs/siap-1.png)

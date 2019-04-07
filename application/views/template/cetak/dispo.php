@@ -130,8 +130,6 @@
 			<input type="checkbox" class="form-check-input" disabled="disabled"> Diedarkan<br>
 			<input type="checkbox" class="form-check-input" disabled="disabled"> Diteliti<br>
 			<input type="checkbox" class="form-check-input" disabled="disabled"> Diketahui<br>
-			<input type="checkbox" class="form-check-input" disabled="disabled"> Proses/Selesaikan<br>
-			<input type="checkbox" class="form-check-input" disabled="disabled"> Setuju*/Tolak*<br>
 			<input type="checkbox" class="form-check-input" disabled="disabled"> Jawab<br>
 			<input type="checkbox" class="form-check-input" disabled="disabled"> Ingatkan<br>
 			<input type="checkbox" class="form-check-input" disabled="disabled"> Simpan<br>
@@ -166,6 +164,6 @@
 
 </html>
 
-<!-- <script type="text/javascript">
+<script type="text/javascript">
 	window.print();
-</script> -->
+</script>
