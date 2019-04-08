@@ -246,7 +246,7 @@
                   <option value="" disabled selected>Pilih Seksi</option>
                   <?php 
                     foreach ($seksi as $u) {
-                      echo "<option value=".$u->kode." disabled selected>".$u->ket."</option>";
+                      echo "<option value=".$u->kode.">".$u->ket."</option>";
                     }
                   ?>
                 </select>
