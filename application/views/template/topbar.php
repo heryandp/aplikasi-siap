@@ -33,6 +33,9 @@
                                 </li>
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
+                                    <div class="pull-left">
+                                        <a href="!#" class="btn btn-default btn-flat" data-toggle="modal" data-target="#gantiprofil">Foto Profil</a>
+                                    </div>
                                     <div class="pull-right">
                                         <a href="<?php echo site_url('auth/logout') ?>" class="btn btn-default btn-flat">Keluar</a>
                                     </div>
