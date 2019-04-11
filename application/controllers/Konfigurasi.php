@@ -35,22 +35,18 @@ class Konfigurasi extends CI_Controller {
 			if ($cek_users) {
 				if ($email == $users) {
 					$this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
-		            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 		            <i class="icon fa fa-check"></i>Tidak bisa menghapus diri sendiri!</div>');
 				} else {
 					$this->Konfigurasi_model->delete_user($email);
 			        $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
-			            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 			            <i class="icon fa fa-check"></i>User berhasil dihapus</div>');
 				}
 			} else {
 				 $this->session->set_flashdata('message', '<div class="alert alert-warning alert-dismissible">
-			            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 			            <i class="icon fa fa-check"></i>Nampaknya terjadi kesalahan</div>');
 			}
 		} else {
 			 $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
-			            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 			            <i class="icon fa fa-check"></i>Hanya Administrator yang dapat melakukan ini Ferguso!</div>');
 		}
 	        redirect(site_url('konfigurasi/user'));

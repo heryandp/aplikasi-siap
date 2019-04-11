@@ -114,7 +114,6 @@ class tabel_suratmasuk extends CI_Controller
 
             // Redirect ke list
             $this->session->set_flashdata('message', '<div class="alert alert-warning alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <i class="icon fa fa-check"></i>Sukses mengubah data</div>');
             redirect(site_url('tabel_suratmasuk'));
     }
@@ -134,7 +133,6 @@ class tabel_suratmasuk extends CI_Controller
             );
             $this->Tabel_suratmasuk_model->add_dispo($data);
             $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <i class="icon fa fa-check"></i>Sukses membuat disposisi</div>');
             redirect(site_url('tabel_suratmasuk'));
             }
@@ -159,18 +157,15 @@ class tabel_suratmasuk extends CI_Controller
             if ($row->no == $last->no) {
                 $this->Tabel_suratmasuk_model->delete($id);
                 $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <i class="icon fa fa-ban"></i>Record berhasil dihapus</div>');
                 redirect(site_url('tabel_suratmasuk'));
             } else {
                $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <i class="icon fa fa-ban"></i>Record tidak dapat dihapus</div>');
                 redirect(site_url('tabel_suratmasuk'));
             }
         } else {
             $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 <i class="icon fa fa-ban"></i>Record tidak ditemukan</div>');
                 redirect(site_url('tabel_suratmasuk'));
         }
