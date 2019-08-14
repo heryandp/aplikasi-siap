@@ -19,13 +19,13 @@
                          <!-- User Account: style can be found in dropdown.less -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <img src="<?php echo base_url('assets/AdminLTE-2.0.5/dist/img/user2-160x160.jpg') ?>" class="user-image" alt="User Image"/>
+                                <img src="<?php echo base_url('assets/upload/profil/thumb/'.$this->session->userdata('avatar')) ?>" class="user-image" alt="User Image"/>
                                 <span class="hidden-xs">Selamat datang, <?php echo $this->session->userdata('firstname')?></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- User image -->
                                 <li class="user-header">
-                                    <img src="<?php echo base_url('assets/AdminLTE-2.0.5/dist/img/user2-160x160.jpg') ?>" class="img-circle" alt="User Image" />
+                                    <img src="<?php echo base_url('assets/upload/profil/thumb/'.$this->session->userdata('avatar')) ?>" class="img-circle" alt="User Image" />
                                     <p>
                                         <?php echo $this->session->userdata('fullname')?>
                                         <small><?php if($this->ion_auth->is_admin()){ echo 'Administrator'; } else { echo 'Member';} ?></small>
@@ -34,7 +34,7 @@
                                 <!-- Menu Footer-->
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                        <a href="!#" class="btn btn-default btn-flat" data-toggle="modal" data-target="#gantiprofil">Foto Profil</a>
+                                        <a href="!#" class="btn btn-default btn-flat" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#gantiprofil">Foto Profil</a>
                                     </div>
                                     <div class="pull-right">
                                         <a href="<?php echo site_url('auth/logout') ?>" class="btn btn-default btn-flat">Keluar</a>

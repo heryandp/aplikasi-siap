@@ -1,123 +1,73 @@
-<!-- Detil -->
-<div id="myModal" class="modal fade" role="dialog">
+<!-- Tambah Edit-->
+<div id="tambah" class="modal fade" role="dialog" style="overflow:hidden">
    <div class="modal-dialog">
     <!-- konten modal-->
     <div class="modal-content">
         <!-- heading modal -->
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Detil Surat Keluar</h4>
+            <h4 class="modal-title"></h4>
         </div>
         <!-- body modal -->
         <div class="modal-body">
-             <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-md-2 control-label">No. Surat</label>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="modal-no" readonly="">
-                    </div>
-                    <label class="col-md-1 control-label">Tgl. </label>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" id="modal-tgl" readonly="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Jenis </label>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" id="modal-jenis" readonly="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Tujuan </label>
-                    <div class="col-md-5">
-                        <textarea type="text" class="form-control" id="modal-tujuan" readonly=""></textarea>
+             <form id="form-input" class="form-horizontal">
+                <div class="form-group jenis">
+                    <label class="col-md-2 control-label">Jenis</label>
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="dropdown">
+                                    <select class="form-control" id="jenis" name="jenis" required>
+                                        <option value="ND">Nota Dinas</option>
+                                        <option value="NDRIK">Nota Dinas RIK</option>
+                                        <option value="BA">Berita Acara</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>                                
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2 control-label">Hal </label>
-                    <div class="col-md-7">
-                        <textarea type="text" class="form-control" id="modal-hal" readonly=""></textarea>
+                    <label class="col-md-2 control-label">Tujuan</label>
+                    <div class="col-md-10">
+                        <?php
+                            echo form_dropdown('tujuan[]', $dd_seksi, $seksi_selected, 'multiple="multiple" class="form-control select2" style="width: 100%" required');
+                        ?>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2 control-label">Keterangan </label>
-                    <div class="col-md-7">
-                        <textarea type="text" class="form-control" id="modal-keterangan" readonly=""></textarea>
+                    <label class="col-md-2 control-label">Hal</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" rows="2" name="hal" id="hal" placeholder="Konfirmasi ... / Pengiriman Berkas ... / Rencana Penugasan Pemeriksaan ..." required></textarea>
+                    </div>
+                </div>
+                <div id="case-list">
+                    <div class="form-group">
+                         <label class="col-md-2 control-label">Case</label>
+                         <div class="col-md-10">
+                            <select name="case" class="form-control case-list" style="width: 100%">
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2 control-label">Pembuat </label>
-                    <div class="col-md-7">
-                        <input type="text" class="form-control" id="modal-pembuat" readonly="">
+                    <label class="col-md-2 control-label">Keterangan</label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" rows="2" name="ket" id="ket" placeholder=""></textarea>
                     </div>
+                </div>
+                <div class="form-group">
+                      <div class="col-md-9">
+                        <input type="hidden" class="form-control" name="id_surat" id="id_surat"/>
+                      </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" id="btnSave" class="btn btn-primary">Tambah</button>
+                    <button type="button" class="btn btn-default btn-md" data-dismiss="modal">Tutup</button>
                 </div>
             </form>
         </div>
         <!-- footer modal -->
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default btn-md" data-dismiss="modal">Tutup</button>
-        </div>
-    </div>
-   </div>
-</div>
-
-<!-- Edit Surat Keluar-->
-<div id="myModaledit" class="modal fade" role="dialog">
-   <div class="modal-dialog">
-    <!-- konten modal-->
-    <div class="modal-content">
-        <!-- heading modal -->
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Ubah Surat Keluar</h4>
-        </div>
-        <!-- body modal -->
-        <div class="modal-body">
-             <form id="edit-form" class="form-horizontal" action="#" method="post">
-                <div class="form-group">
-                    <label class="col-md-2 control-label">No. Surat</label>
-                    <div class="col-md-6">
-                        <input type="text" class="form-control" id="edit-no" readonly="">
-                    </div>
-                    <label class="col-md-1 control-label">Tgl. </label>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" id="edit-tgl" readonly="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Jenis </label>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" id="edit-jenis" readonly="">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Tujuan </label>
-                    <div class="col-md-5">
-                        <textarea type="text" class="form-control" name="edit-tujuan" id="edit-tujuan"></textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Hal </label>
-                    <div class="col-md-7">
-                        <textarea type="text" class="form-control" name="edit-hal" id="edit-hal"></textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Keterangan </label>
-                    <div class="col-md-7">
-                        <textarea type="text" class="form-control" name="edit-keterangan" id="edit-keterangan"></textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">Pembuat </label>
-                    <div class="col-md-7">
-                        <input type="text" class="form-control" id="edit-pembuat" readonly="">
-                    </div>
-                </div>
-           <button class="btn btn-warning btn-md">Update</button>
-           <button type="submit" class="btn btn-default btn-md" data-dismiss="modal">Tutup</button>
-          </form>
-        </div>
     </div>
    </div>
 </div>

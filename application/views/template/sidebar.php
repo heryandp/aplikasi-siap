@@ -5,7 +5,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?php echo base_url('assets/AdminLTE-2.0.5/dist/img/user2-160x160.jpg') ?>" class="img-rounded" alt="User Image" />
+                <img src="<?php echo base_url('assets/upload/profil/thumb/'.$this->session->userdata('avatar')) ?>" class="img-rounded" alt="User Image" />
             </div>
             <div class="pull-left info">
                 <small><?php echo $this->session->userdata('fullname')?><br>

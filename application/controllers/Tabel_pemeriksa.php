@@ -25,6 +25,7 @@ class Tabel_pemeriksa extends CI_Controller
 
     public function json()
     {
+        ob_start('ob_gzhandler');
         header('Content-Type: application/json');
         echo $this->Tabel_pemeriksa_model->json();    
     }

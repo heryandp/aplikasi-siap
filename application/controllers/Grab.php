@@ -21,6 +21,11 @@ class Grab extends CI_Controller {
 		echo json_encode($data);
 	}
 
+	public function supervisor($jabatan)
+	{
+		echo $this->Grab_model->supervisor($jabatan);
+	}
+
 	public function getkode($kode)
 	{
 		$data = $this->Grab_model->getkode($kode);
@@ -38,6 +43,13 @@ class Grab extends CI_Controller {
 		header('Content-Type: application/json');
         echo $this->Grab_model->jsonsp2();
 	}
+
+	public function jsonlhp()
+	{
+		header('Content-Type: application/json');
+        echo $this->Grab_model->jsonlhp();
+	}
+
 
 }
 

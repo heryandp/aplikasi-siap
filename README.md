@@ -8,7 +8,12 @@ Fungsi aplikasi:
 - (lainnya masih dalam pengembangan)
 
 Fitur aplikasi:
-- Manajemen user
+- Manajemen User
+- Manajemen Pemeriksa Pajak
+- Manajemen Umum (Nama Kantor, dll)
+
+Status
+- Masih dalam pengembangan, database belum saya sertakan
 
 Kontak
 heryandwiyoga@gmail.com

@@ -18,6 +18,34 @@ class Grab_model extends CI_Model
         return $query;
     }
 
+    public function kasi($jabatan)
+    {
+        //ambil ID tabel_jabatan
+        $this->db->trans_start();
+        $this->db->select('id');
+        $this->db->where('jabatan', $jabatan);
+        $id = $this->db->get('tabel_jabatan')->row();
+        $this->db->trans_complete();
+
+        //ambil nama
+        $this->db->select('nama');
+        $this->db->where('jabatan', $id->id);
+        $this->db->where('seksi', '0205');
+        return $this->db->get('tabel_pegawai')->row();
+    }
+    public function supervisor($jabatan)
+    {
+        $this->db->trans_start();
+        $this->db->select('id');
+        $this->db->where('jabatan', $jabatan);
+        $id = $this->db->get('tabel_jabatan')->row();
+        $this->db->trans_complete();
+
+        $this->db->select('nama');
+        $this->db->where('jabatan', $id->id);
+        return $this->db->get('tabel_pegawai')->row();
+    }
+
     public function getkode($kode)
     {
         $this->db->select('ket');
@@ -26,22 +54,32 @@ class Grab_model extends CI_Model
     }
 
     function jsonkode() {
-        $this->datatables->select('kode,ket,durasi');
+        $this->db->select('kode,ket,durasi');
         $this->datatables->from('tabel_kode');
         return $this->datatables->generate();
     }
 
     function jsonuser() {
-        $this->datatables->select('email,first_name,last_name,active');
+        $this->db->select('email,first_name,last_name,active');
         $this->datatables->from('users');
         return $this->datatables->generate();
     }
 
     function jsonsp2()
     {
-        $this->datatables->select('tabel_sp2.id,tabel_sp2.idKasus,tabel_mfwp.npwp,nama,np2,kode,no,tgl,CONCAT(bln1,thn1,"-",bln2,thn2) as masa');
-        $this->datatables->join('tabel_dafnom',' tabel_sp2.idKasus = tabel_dafnom.idKasus');
-        $this->datatables->join('tabel_mfwp','tabel_dafnom.npwp = tabel_mfwp.npwp');
+        $this->db->select('tabel_sp2.id,tabel_sp2.idKasus,tabel_mfwp.npwp,nama,np2,kode,no,tgl,CONCAT(bln1,thn1,"-",bln2,thn2) as masa');
+        $this->db->join('tabel_dafnom',' tabel_sp2.idKasus = tabel_dafnom.idKasus');
+        $this->db->join('tabel_mfwp','tabel_dafnom.npwp = tabel_mfwp.npwp');
+        $this->datatables->from('tabel_sp2');
+        return $this->datatables->generate();
+    }
+
+    function jsonlhp()
+    {
+        $this->db->select('tabel_sp2.id,tabel_sp2.idKasus,tabel_mfwp.npwp,nama,np2,kode,no,tgl,CONCAT(bln1,thn1,"-",bln2,thn2) as masa,no_lhp,tgl_lhp');
+        $this->db->join('tabel_dafnom','tabel_sp2.idKasus = tabel_dafnom.idKasus');
+        $this->db->join('tabel_lhp','tabel_lhp.idKasus = tabel_sp2.idKasus');
+        $this->db->join('tabel_mfwp','tabel_dafnom.npwp = tabel_mfwp.npwp');
         $this->datatables->from('tabel_sp2');
         return $this->datatables->generate();
     }
@@ -73,8 +111,9 @@ class Grab_model extends CI_Model
     function dropdown_pemeriksa()
     {
         // ambil data dari db
-        $this->db->select('id,pemeriksa_nip,pemeriksa_nama,pemeriksa_ip');
-        $this->db->order_by('pemeriksa_nama', 'asc');
+        $this->db->select('tabel_pemeriksa.id,nip,nama,pemeriksa_ip');
+        $this->db->join('tabel_pegawai', 'tabel_pegawai.ip = tabel_pemeriksa.pemeriksa_ip', 'left');
+        $this->db->order_by('nama', 'asc');
         $result = $this->db->get('tabel_pemeriksa');
         // bikin array
         // please select berikut ini merupakan tambahan saja agar saat pertama
@@ -83,7 +122,7 @@ class Grab_model extends CI_Model
         if ($result->num_rows() > 0) {
             foreach ($result->result() as $row) {
             // tentukan value (sebelah kiri) dan labelnya (sebelah kanan)
-                $dd[$row->pemeriksa_ip] = $row->pemeriksa_ip.' - '.$row->pemeriksa_nama;
+                $dd[$row->pemeriksa_ip] = $row->pemeriksa_ip.' - '.$row->nama;
             }
         }
         return $dd;
@@ -121,4 +160,27 @@ class Grab_model extends CI_Model
         return $this->db->get('seksi')->result();
     }
 
+    // SURAT KELUAR
+    public function suratkeluar($jenis,$id)
+    {
+        if ($jenis = 'NDRIK') {
+            $this->db->join('tabel_dafnom', 'tabel_dafnom.idKasus = tabel_suratkeluar_ndrik.idKasus', 'left');
+            $this->db->join('tabel_suratkeluar', 'tabel_suratkeluar_ndrik.id_suratkeluar=tabel_suratkeluar.id', 'left');
+            $this->db->join('tabel_kode', 'tabel_kode.kode = tabel_dafnom.kode', 'left');
+            $this->db->join('tabel_mfwp', 'tabel_mfwp.npwp = tabel_dafnom.npwp', 'left');
+            $this->db->where('tabel_suratkeluar_ndrik.id', $id);
+            return $this->db->get('tabel_suratkeluar_ndrik')->row();
+        }
+    }
+
+    // SP2
+    public function sp2($idKasus)
+    {
+        $this->db->select('tabel_sp2.*,tabel_mfwp.nama,CONCAT(tabel_mfwp.alamat,",",tabel_mfwp.kelurahan,",",tabel_mfwp.kecamatan,",",tabel_mfwp.kota) as alamat,tabel_dafnom.*,tabel_kode.ket,tabel_kode.tujuan_pem');
+        $this->db->join('tabel_dafnom', 'tabel_sp2.idKasus = tabel_dafnom.idKasus', 'left');
+        $this->db->join('tabel_mfwp', 'tabel_mfwp.npwp=tabel_dafnom.npwp', 'left');
+        $this->db->join('tabel_kode', 'tabel_kode.kode = tabel_dafnom.kode', 'left');
+        $this->db->where('tabel_sp2.idKasus', $idKasus);
+        return $this->db->get('tabel_sp2')->row();
+    }
 }

@@ -16,23 +16,20 @@ class Tabel_suratkeluar_model extends CI_Model
     }
 
     // datatables
-    function json() {
-        $this->datatables->select('id,jenis,nomor,tgl,thn,tujuan,hal,ket,pembuat');
+    function json($fungsi,$id) {
+        $this->db->select('id,jenis,nomor,tgl,thn,tujuan,hal,ket,pembuat');
+        if ($fungsi=='edit') {
+            $this->db->where('id', $id);
+        }
         $this->datatables->from('tabel_suratkeluar');
         return $this->datatables->generate();
     }
     function jsonndrik() {
-        $this->datatables->select('tabel_suratkeluar_ndrik.id,id_suratkeluar,tabel_suratkeluar.nomor,tabel_suratkeluar.tgl,tabel_suratkeluar_ndrik.idKasus,tabel_dafnom.np2,tabel_dafnom.npwp,tabel_mfwp.nama,tabel_mfwp.alamat,tabel_dafnom.kode,CONCAT(bln1,thn1,"-",bln2,thn2) as masa,tabel_dafnom.tglsptlb,tabel_suratkeluar.tujuan,supervisor,tabel_suratkeluar_ndrik.status,tgl_kembali');
+        $this->db->select('tabel_suratkeluar_ndrik.id,id_suratkeluar,tabel_suratkeluar.nomor,tabel_suratkeluar.tgl,tabel_suratkeluar_ndrik.idKasus,tabel_dafnom.np2,tabel_dafnom.npwp,tabel_mfwp.nama,tabel_mfwp.alamat,tabel_dafnom.kode,CONCAT(bln1,thn1,"-",bln2,thn2) as masa,tabel_dafnom.tglsptlb,tabel_suratkeluar.tujuan,tabel_suratkeluar_ndrik.status,tgl_kembali');
+        $this->db->join('tabel_suratkeluar','tabel_suratkeluar_ndrik.id_suratkeluar = tabel_suratkeluar.id','left');
+        $this->db->join('tabel_dafnom','tabel_suratkeluar_ndrik.idKasus = tabel_dafnom.idKasus','left');
+        $this->db->join('tabel_mfwp','tabel_dafnom.npwp = tabel_mfwp.npwp','left');
         $this->datatables->from('tabel_suratkeluar_ndrik');
-        $this->datatables->join('tabel_suratkeluar','tabel_suratkeluar_ndrik.id_suratkeluar = tabel_suratkeluar.id','left');
-        $this->datatables->join('tabel_dafnom','tabel_suratkeluar_ndrik.idKasus = tabel_dafnom.idKasus','left');
-        $this->datatables->join('tabel_mfwp','tabel_dafnom.npwp = tabel_mfwp.npwp','left');
-        return $this->datatables->generate();
-    }
-    function json_tugas() {
-        $this->datatables->select('id,jenis,nomor,tgl,thn,tujuan,hal,ket,pembuat');
-        $this->datatables->from('tabel_suratkeluar');
-        $this->datatables->where('pelaksana', 'Heryan Dwiyoga Putra');
         return $this->datatables->generate();
     }
 
@@ -69,26 +66,15 @@ class Tabel_suratkeluar_model extends CI_Model
     }
 
     // get data dropdown
-    function dropdown_case()
+    function dropdown_case($q)
     {
         // ambil data dari db
         $this->db->select('idKasus, tabel_dafnom.npwp, tabel_mfwp.nama, kode, bln1,thn1,bln2,thn2');
+        $this->db->like('tabel_mfwp.nama', $q);
         $this->db->order_by('idKasus', 'asc');
         $this->db->join('tabel_mfwp', 'tabel_dafnom.npwp = tabel_mfwp.npwp', 'left');
-        $result = $this->db->get('tabel_dafnom');
-        
-        // bikin array
-        // please select berikut ini merupakan tambahan saja agar saat pertama
-        // diload akan ditampilkan text please select.
-        $dd[''] = 'Pilih Case / Wajib Pajak';
-        if ($result->num_rows() > 0) {
-            foreach ($result->result() as $row) {
-            // tentukan value (sebelah kiri) dan labelnya (sebelah kanan)
-                $masa = $row->bln1.substr($row->thn1,2).'/'.$row->bln2.substr($row->thn2, 2);
-                $dd[$row->idKasus] = $row->nama.' - '.$row->kode.' - '.$masa;
-            }
-        }
-        return $dd;
+        $result = $this->db->get('tabel_dafnom')->result();
+            echo json_encode($result);
     }
 
     // insert data
@@ -133,6 +119,14 @@ class Tabel_suratkeluar_model extends CI_Model
     {
         $this->db->where('id', $ids);
         $this->db->update('tabel_suratkeluar_ndrik', $data);
+    }
+
+    // count ndrik
+    function count_ndrik($status)
+    {
+        $this->db->select('status');
+        $this->db->where('status', $status);
+        return $this->db->get('tabel_suratkeluar_ndrik')->num_rows();
     }
 
     // delete data

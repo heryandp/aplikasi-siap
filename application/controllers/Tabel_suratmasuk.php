@@ -1,5 +1,4 @@
 <?php
-
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
@@ -29,61 +28,47 @@ class tabel_suratmasuk extends CI_Controller
             'unassign' => $this->Tabel_suratmasuk_model->info('tabel_suratdispo','pelaksana','-'),
             'pelaksana' => $this->Tabel_suratmasuk_model->pelaksana(),
             'seksi' => $this->Grab_model->seksi(),
+            'dd_seksi' => $this->Grab_model->dropdown_seksi('masuk'),
+            'seksi_selected' => $this->input->post('asalsuratseksi') ? $this->input->post('asalsuratseksi') : '',
         );
         $this->load->view('tabel_suratmasuk/list',$data);
     } 
     
     public function json() {
-            header('Content-Type: application/json');
-            echo $this->Tabel_suratmasuk_model->json();
+        // ob_start('ob_gzhandler');
+        header('Content-Type: application/json');
+        echo $this->Tabel_suratmasuk_model->json('list',0);
     }
 
-     public function jsontugas() {
+    public function json_edit($id) {
+        header('Content-Type: application/json');
+        echo $this->Tabel_suratmasuk_model->json('edit',$id);
+    }
+
+    public function jsontugas() {
             header('Content-Type: application/json');
             $pelaksana = $this->session->userdata('emailbro');
             echo $this->Tabel_suratmasuk_model->jsontugas($pelaksana);
     }
 
-    public function nomorsurat()
+    public function create_action() 
     {
         $row = $this->Tabel_suratmasuk_model->get_no_surat();
         if ($row < 1) {
-            echo '1'.'/RIK/'.date('Y');
+            $no = '1'.'/RIK/'.date('Y');
         } else {
             $row2 = $row+1;
-            echo $row2.'/RIK/'.date('Y');
+            $no = $row2.'/RIK/'.date('Y');
         }
-    }
 
-    public function create() 
-    {
         $data = array(
-            'button' => 'Buat',
-            'action' => site_url('tabel_suratmasuk/create_action'),
-            'id' => set_value('id'),
-            'pembuat' => set_value('pembuat'),
-            'no' => set_value('no'),
-            'nosekre' => set_value('nosekre'),
-            'tglsuratsekre' => set_value('tglsuratsekre'),
-            'nosurat' => set_value('nosuratsekre'),
-            'asalsuratsekre' => set_value('asalsuratsekre'),
-            'hal' => set_value('hal'),
-            'dd_seksi' => $this->Grab_model->dropdown_seksi('masuk'),
-            'seksi_selected' => $this->input->post('asalsuratseksi') ? $this->input->post('asalsuratseksi') : '',
-    );
-        $this->load->view('tabel_suratmasuk/form', $data);
-    }
-    
-    public function create_action() 
-    {
-        $data = array(
-                    'no' => $this->input->post('no',TRUE),
+                    'no' => $no,
                     'no_sekre' => $this->input->post('nosekre',TRUE),
                     'no_surat' => $this->input->post('nosurat',TRUE),
                     'tgl_surat' => $this->input->post('tglsurat',TRUE),
                     'hal_surat' => $this->input->post('hal',TRUE),
                     'seksi' => $this->input->post('asalsuratseksi',TRUE),
-                    'pembuat' => $this->input->post('pembuat',TRUE),
+                    'pembuat' =>  $this->session->userdata('fullname'),
                     'asal_surat' => $this->input->post('asalsuratsekre',TRUE),
             );
     
@@ -91,54 +76,43 @@ class tabel_suratmasuk extends CI_Controller
         $this->Tabel_suratmasuk_model->insert($data);
 
         //Redirect ke list
-        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible">
-            <i class="icon fa fa-check"></i>Sukses menambahkan data</div>');
         redirect(site_url('tabel_suratmasuk'));
     
     }
 
-     public function update($id) 
+    public function update() 
     {
+            $id = $this->input->post('id_surat',TRUE);
             $surat = array(
-                    'no_sekre' => $this->input->post('editnosekre',TRUE),
-                    'no_surat' => $this->input->post('editnosurat',TRUE),
-                    'tgl_surat' => $this->input->post('edittglsurat',TRUE),
-                    'hal_surat' => $this->input->post('edithal',TRUE),
-                    'asal_surat' => $this->input->post('editasalsuratsekre',TRUE),
+                    'no_sekre' => $this->input->post('nosekre',TRUE),
+                    'no_surat' => $this->input->post('nosurat',TRUE),
+                    'tgl_surat' => $this->input->post('tglsurat',TRUE),
+                    'hal_surat' => $this->input->post('hal',TRUE),
+                    'asal_surat' => $this->input->post('asalsuratsekre',TRUE),
                 );
             $dispo = array(
-                    'seksi' => $this->input->post('editasalsuratseksi',TRUE),
+                    'seksi' => $this->input->post('asalsuratseksi',TRUE),
             );
+            
             //Update ke tabel_suratmasuk
             $this->Tabel_suratmasuk_model->update($id,$surat,$dispo);
 
-            // Redirect ke list
-            $this->session->set_flashdata('message', '<div class="alert alert-warning alert-dismissible">
-                <i class="icon fa fa-check"></i>Sukses mengubah data</div>');
             redirect(site_url('tabel_suratmasuk'));
     }
 
     public function dispo() 
     {
-        if ($this->uri->segment('3') == 'add'){
-            if (!$this->uri->segment('4')) {
-                redirect(site_url('tabel_suratmasuk'));
-            } else {
-            $data = array(
-                    'id_surat_masuk' => $this->uri->segment('4'),
-                    'sifat' => $this->input->post('dispo-sifat'),
-                    'pelaksana' => $this->input->post('dispo-pelaksana'),
-                    'keterangan' => $this->input->post('dispo-keterangan'),
-                    'catatan' => $this->input->post('dispo-catatan'),
+        $id = $this->input->post('dispo-id');
+        $data = array(
+                'id_surat_masuk' => $id,
+                'sifat' => $this->input->post('dispo-sifat',TRUE),
+                'pelaksana' => $this->input->post('dispo-pelaksana',TRUE),
+                'keterangan' => $this->input->post('dispo-keterangan',TRUE),
+                'catatan' => $this->input->post('dispo-catatan',TRUE),
             );
-            $this->Tabel_suratmasuk_model->add_dispo($data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible">
-                <i class="icon fa fa-check"></i>Sukses membuat disposisi</div>');
-            redirect(site_url('tabel_suratmasuk'));
-            }
-        } else {
-            redirect(site_url('tabel_suratmasuk'));
-        }
+        $this->Tabel_suratmasuk_model->add_dispo($data);
+
+        echo $id;
     }
 
     public function dispo_cetak($id)

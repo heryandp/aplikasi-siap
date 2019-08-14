@@ -17,8 +17,8 @@ class Tabel_pemeriksa_model extends CI_Model
     }
 
     function json() {
-        $this->datatables->select('tabel_pemeriksa.id,nama,nip,pemeriksa_ip,pemeriksa_role');
-        $this->datatables->join('tabel_pegawai','tabel_pemeriksa.pemeriksa_ip = tabel_pegawai.ip','left');
+        $this->db->select('tabel_pemeriksa.id,nama,nip,pemeriksa_ip,pemeriksa_role');
+        $this->db->join('tabel_pegawai','tabel_pemeriksa.pemeriksa_ip = tabel_pegawai.ip','left');
         $this->datatables->from('tabel_pemeriksa');
         return $this->datatables->generate();
     }

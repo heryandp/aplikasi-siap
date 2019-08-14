@@ -38,7 +38,7 @@
 		<table style="width: 100%;">
 		<tbody>
 		<tr>
-		<td style="width: 30%;"rowspan="5"><img src="https://4.bp.blogspot.com/-qIjoke_AxpA/UHufovU2bLI/AAAAAAAAAHg/Leqn4WlYV-Y/s1600/Dep.+Perhubungan.JPG" width="70" height="70" style="display:block;margin-left: auto; margin-right: auto;"/></td>
+		<td style="width: 30%;"rowspan="5"><img src="<?php echo base_url('assets/upload/assets/logo.JPG') ?>" width="70" height="70" style="display:block;margin-left: auto; margin-right: auto;"/></td>
 		<td style="font-size:9px;text-align: center;"><strong>KEMENTERIAN KEUANGAN REPUBLIK INDONESIA</strong></td>
 		</tr>
 		<tr>
@@ -116,6 +116,7 @@
 				echo "<input type='checkbox' class='form-check-input' disabled='disabled'> ". ucwords(strtolower($u->nama))."<br>";
 			};
 			?>
+			<input type='checkbox' class='form-check-input' disabled='disabled'> Semua<br>
 			<input type="checkbox" class="form-check-input" disabled="disabled"> ...<br>
 		</td>
 		</tr>

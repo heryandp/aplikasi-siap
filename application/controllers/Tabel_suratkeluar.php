@@ -11,9 +11,9 @@ class tabel_suratkeluar extends CI_Controller
         $this->load->model('Tabel_suratkeluar_model');
         $this->load->library('form_validation');        
 	    $this->load->library('datatables');
+        $this->load->library('ion_auth');
         $this->load->model('ion_auth_model');
         $this->load->model('Grab_model');
-        $this->load->library('ion_auth');
         if($this->ion_auth->logged_in()===FALSE)
         {
             redirect('auth/login');
@@ -22,7 +22,14 @@ class tabel_suratkeluar extends CI_Controller
 
     public function index()
     {
-        $this->load->view('tabel_suratkeluar/list');
+         $data = array(
+            // 'dd_case' => $this->Tabel_suratkeluar_model->dropdown_case(),
+            'case_selected' => $this->input->post('case') ? $this->input->post('case') : '',
+            'dd_seksi' => $this->Grab_model->dropdown_seksi('keluar'),
+            'seksi_selected' => $this->input->post('case') ? $this->input->post('seksi') : '',
+        );
+
+        $this->load->view('tabel_suratkeluar/list',$data);
     } 
 
     public function get_no_surat($jenis)
@@ -30,27 +37,27 @@ class tabel_suratkeluar extends CI_Controller
         $row = $this->Tabel_suratkeluar_model->get_no_surat($jenis);
         if ($row < 1) {
             if ($jenis == 'ND') {
-                echo 'ND-1/WPJ.05/KP.0205/'.date('Y');
+                $no = 'ND-1/WPJ.05/KP.0205/'.date('Y');
             } elseif ($jenis == 'NDRIK') {
-                echo 'ND-1.RIK/WPJ.05/KP.0205/'.date('Y');
+                $no = 'ND-1.RIK/WPJ.05/KP.0205/'.date('Y');
             } else {
-                echo 'BA-1/WPJ.05/KP.0205/'.date('Y');
+                $no = 'BA-1/WPJ.05/KP.0205/'.date('Y');
             }
         } else {
             $rows = $row+1;
             if ($jenis == 'ND') {
-                echo 'ND-'.$rows.'/WPJ.05/KP.0205/'.date('Y');
+                $no = 'ND-'.$rows.'/WPJ.05/KP.0205/'.date('Y');
             } elseif ($jenis == 'NDRIK') {
-                echo 'ND-'.$rows.'.RIK/WPJ.05/KP.0205/'.date('Y');
+                $no = 'ND-'.$rows.'.RIK/WPJ.05/KP.0205/'.date('Y');
             } else {
-                echo 'BA-'.$rows.'/WPJ.05/KP.0205/'.date('Y');
+                $no = 'BA-'.$rows.'/WPJ.05/KP.0205/'.date('Y');
             }
         }
     }
     
     public function json() {
         header('Content-Type: application/json');
-        echo $this->Tabel_suratkeluar_model->json();
+        echo $this->Tabel_suratkeluar_model->json('list',0);
     }
 
     public function jsonndrik() {
@@ -58,63 +65,70 @@ class tabel_suratkeluar extends CI_Controller
         echo $this->Tabel_suratkeluar_model->jsonndrik();
     }
 
-    public function create() 
+    public function jsoncase($q)
     {
-        $data = array(
-            'button' => 'Buat',
-            'action' => site_url('tabel_suratkeluar/create_action'),
-    	    'id' => set_value('id'),
-            'jenis' => set_value('jenis'),
-            'nomor' => set_value('nomor'),
-            'tgl' => set_value('tgl'),
-            'tgl' => set_value('tgl'),
-            'tujuan' => set_value('tujuan'),
-            'hal' => set_value('hal'),
-            'ket' => set_value('ket'),
-            'pembuat' => set_value('pembuat'),
-            'dd_case' => $this->Tabel_suratkeluar_model->dropdown_case(),
-            'case_selected' => $this->input->post('case') ? $this->input->post('case') : '',
-            'dd_seksi' => $this->Grab_model->dropdown_seksi('keluar'),
-            'seksi_selected' => $this->input->post('case') ? $this->input->post('seksi') : '',
-	);
-        $this->load->view('tabel_suratkeluar/form', $data);
+        echo $this->Tabel_suratkeluar_model->dropdown_case($q);
     }
-    
+
     public function create_action() 
-    {
-        $thn = explode('/', $this->input->post('tgl'));
+    {   
+        $jenis = $this->input->post('jenis');
+        $row = $this->Tabel_suratkeluar_model->get_no_surat($jenis);
+        if ($row < 1) {
+            $rows = sprintf('%04d',1);
+            if ($jenis == 'ND') {
+                $no = 'ND-'.$rows.'/WPJ.05/KP.0205/'.date('Y');
+            } elseif ($jenis == 'NDRIK') {
+                $no = 'ND-'.$rows.'.RIK/WPJ.05/KP.0205/'.date('Y');
+            } else {
+                $no = 'BA-'.$rows.'/WPJ.05/KP.0205/'.date('Y');
+            }
+        } else {
+            $rows = sprintf('%04d',$row+1);
+            if ($jenis == 'ND') {
+                $no = 'ND-'.$rows.'/WPJ.05/KP.0205/'.date('Y');
+            } elseif ($jenis == 'NDRIK') {
+                $no = 'ND-'.$rows.'.RIK/WPJ.05/KP.0205/'.date('Y');
+            } else {
+                $no = 'BA-'.$rows.'/WPJ.05/KP.0205/'.date('Y');
+            }
+        }
+
+        // $thn = explode('-', date('Y-m-d'));
         $data = array(
                     'jenis' => $this->input->post('jenis',TRUE),
-                    'nomor' => $this->input->post('nomor',TRUE),
-                    'tgl' => $this->input->post('tgl',TRUE),
-                    'thn' => $thn[2],
+                    'nomor' => $no,
+                    'tgl' => date('Y-m-d'),
+                    'thn' => date('Y'),
                     'tujuan' => implode(", ",$this->input->post('tujuan',TRUE)),
                     'case' => $this->input->post('case',TRUE),
                     'hal' => $this->input->post('hal',TRUE),
                     'ket' => $this->input->post('ket',TRUE),
-                    'pembuat' => $this->input->post('pembuat',TRUE),
+                    'pembuat' => $this->session->userdata('fullname'),
 	    );
 
         $this->Tabel_suratkeluar_model->insert($data);
 
-        //Redirect list
-        $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible">
-            <i class="icon fa fa-check"></i>Sukses menambahkan data</div>');
         redirect(site_url('tabel_suratkeluar'));
     }
     
-    public function update($id) 
-    {
-      $data = array(
-            'tujuan' => $this->input->post('edit-tujuan',TRUE),
-            'hal' => $this->input->post('edit-hal',TRUE),
-            'ket' => $this->input->post('edit-keterangan',TRUE),
-      );
+    public function json_edit($id) {
+        header('Content-Type: application/json');
+        echo $this->Tabel_suratkeluar_model->json('edit',$id);
+    }
 
-      $this->Tabel_suratkeluar_model->update($id,$data);
-      $this->session->set_flashdata('message', '<div class="alert alert-success">
-                <i class="icon fa fa-check"></i>Sukses mengubah data</div>');
-      redirect(site_url('tabel_suratkeluar'));
+    public function update() 
+    {
+        $id = $this->input->post('id_surat',TRUE);
+        $data = array(
+                    'tujuan' => implode(", ",$this->input->post('tujuan',TRUE)),
+                    'hal' => $this->input->post('hal',TRUE),
+                    'ket' => $this->input->post('ket',TRUE),
+                );
+
+        $this->Tabel_suratkeluar_model->update($id,$data);
+        
+        redirect(site_url('tabel_suratkeluar'));
     }
     
     public function delete($id) 
@@ -160,30 +174,32 @@ class tabel_suratkeluar extends CI_Controller
     	$this->form_validation->set_error_delimiters('<span class="text-danger">', '</span>');
     }
 
-    public function excel()
-    {
-        echo '';
-    }
-        
-
     //Nota Dinas
 
     //Nota Dinas ND RIK
     public function ndrik()
     {
-        $this->load->view('tabel_suratkeluar/nd/ndrik/list');
+        $data = array(
+                        'selesai' => $this->Tabel_suratkeluar_model->count_ndrik('0'),
+                        'proses' => $this->Tabel_suratkeluar_model->count_ndrik('1'),
+                        'batal' => $this->Tabel_suratkeluar_model->count_ndrik('2'),
+        );
+        // var_dump($data);
+        $this->load->view('tabel_suratkeluar/nd/ndrik/list',$data);
     }
 
     //Proses ND RIK
-    public function ndrik_proses($id)
+    public function ndrik_proses()
     {
+        $id = $this->input->post('id-ndrik',TRUE);
         $data = array(
                 'status' => $this->input->post('status-nd',TRUE),
                 'tgl_kembali'  => $this->input->post('tgl-kembali',TRUE),
         );
+
        $this->Tabel_suratkeluar_model->update_ndrik($id,$data);
        //Refresh
-        redirect(site_url('tabel_suratkeluar/ndrik'));
+       redirect(site_url('tabel_suratkeluar/ndrik'));
     }
 
 }

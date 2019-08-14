@@ -33,25 +33,6 @@ $this->load->view('template/sidebar');
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-1 control-label">Nomor</label>
-                            <div class="col-md-8">
-                                <div class="row">
-                                    <div class="col-md-7">
-                                            <?php if ($nomor == '') {
-                                                echo '<input type="text" class="form-control" name="nomor" id="nomor" readonly/>
-                                                ';
-                                            } else {
-                                                echo '<input type="text" class="form-control" name="nomor" id="nomor" value="'.$nomor.'"readonly/>';
-                                            }
-                                            ?>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <a class="btn btn-info" name="get-nomor" id="get-nomor"><i class="fa fa-download" aria-hidden="true"></i> Ambil Nomor</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-md-1 control-label">Tanggal <?php echo form_error('tgl') ?></label>
                             <div class="col-md-6">
                                 <div class="row">
@@ -101,8 +82,6 @@ $this->load->view('template/sidebar');
                                     } else {
                                         echo '<input style="border: none;background-color: #fff0;" tabindex="-1" type="text" class="form-control" name="pembuat" id="pembuat" value="'.$pembuat.'" readonly/>';
                                     }
-                                    
-                                
                                 ?>
                             </div>
                         </div>
@@ -120,6 +99,12 @@ $this->load->view('template/sidebar');
 $this->load->view('template/js');
 $this->load->view('tabel_suratkeluar/js');
 ?>
+
+<script>
+$("#hal").autocomplete({
+  source: [ "Pengiriman Berkas LHP a.n. ","Pengiriman Berkas LHP Tujuan Lain","Permintaan Data Tunggakan dan Alket","Rencana Penugasan Pemeriksaan" ]
+});
+</script>
 
 <?php
 $this->load->view('template/foot');

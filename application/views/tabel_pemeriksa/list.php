@@ -23,7 +23,7 @@ $this->load->view('template/sidebar');
               <?php echo anchor(site_url('tabel_suratkeluar/excel'), '<i class="fa fa-file-excel-o" aria-hidden="true"></i> Ekspor Excel', 'class="btn btn-success"'); ?>
             </div>
         </div>
-        <table class="table table-bordered table-striped" id="mytable">
+        <table class="table table-bordered table-striped" id="example">
             <thead>
                 <tr>
                     <th>No</th>
@@ -45,6 +45,7 @@ $this->load->view('template/sidebar');
         <script src="<?php echo base_url('assets/datatables/jquery.dataTables.js') ?>"></script>
         <script src="<?php echo base_url('assets/datatables/dataTables.bootstrap.js') ?>"></script>
         <script type="text/javascript">
+            // New Datatables
             $(document).ready(function() {
                 $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
                 {
@@ -59,25 +60,13 @@ $this->load->view('template/sidebar');
                     };
                 };
 
-                var t = $("#mytable").DataTable({
-                    initComplete: function() {
-                        var api = this.api();
-                        $('#mytable_filter input')
-                                .off('.DT')
-                                .on('keyup.DT', function(e) {
-                                    if (e.keyCode == 13) {
-                                        api.search(this.value).draw();
-                            }
-                        });
-                    },
-                    oLanguage: {
-                        sProcessing: "memuat..."
-                    },
-                    processing: true,
-                    serverSide: true,
-                    ajax: {"url": "tabel_pemeriksa/json", "type": "POST"},
-                    columns: [
-                        {
+                var table = $('#example').DataTable( {
+                    "ajax": "tabel_pemeriksa/json",
+                    "serverside": true,
+                    "responsive": true,
+                    "deferRender": true,
+                    "columns": [
+                       {
                             "data": "id",
                             "orderable": false
                         },{"data": "nama"},{"data": "nip"},{"data": "pemeriksa_ip"},{"data": "pemeriksa_role"},
@@ -90,24 +79,20 @@ $this->load->view('template/sidebar');
                             "className" : "text-center",
                         },
                     ],
-                    order: [[1, 'asc']],
+                    "order": [[0, 'desc']],
                     rowCallback: function(row, data, iDisplayIndex) {
-                        var info = this.fnPagingInfo();
-                        var page = info.iPage;
-                        var length = info.iLength;
-                        var index = page * length + (iDisplayIndex + 1);
-                        $('td:eq(0)', row).html(index);
+                                var info = this.fnPagingInfo();
+                                var page = info.iPage;
+                                var length = info.iLength;
+                                var index = page * length + (iDisplayIndex + 1);
+                                $('td:eq(0)', row).html(index);
                     }
-                });
-                $('#mytable tbody').on( 'click', 'button', function () {
-                    var data = t.row( $(this).parents('tr') ).data();
-
-                    // Modal Detil
-
-                    // Modal Aksi
-                   
                 } );
-            });
+                
+                $('#example tbody').on( 'click', 'button', function () {
+                        var data = table.row( $(this).parents('tr') ).data();
+                    } );
+                } );
         </script>
 
   </div><!-- /.box-body -->

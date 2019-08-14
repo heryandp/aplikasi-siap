@@ -93,7 +93,7 @@ $this->load->view('template/sidebar');
                       <tr>
                           <td class="col-md-1 text-center"><?php echo $no++ ?></td>
                           <td class="text-center"><?php echo $u->nama ?></td>
-                          <td class="text-center"><?php echo $u->pemeriksa ?></td>
+                          <td class="text-center"><?php echo $u->ip ?></td>
                           <td class="text-center"><?php echo $u->nip ?></td>
                           <td class="text-center"><?php echo $u->golongan ?></td>
                           <td><?php echo strtoupper($u->role); ?></td>

@@ -23,12 +23,7 @@ $this->load->view('template/sidebar');
 <section class="content-header">
     <h1 style="color: white">
         Dashboard
-        <!-- <small>Version 2.0</small> -->
     </h1>
-<!--     <ol class="breadcrumb" style="color: white">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Dashboard</li>
-    </ol> -->
 </section>
 
 <!-- Main content -->
@@ -108,12 +103,6 @@ $this->load->view('template/js');
 <script src="<?php echo base_url('assets/AdminLTE-2.0.5/plugins/iCheck/icheck.min.js') ?>" type="text/javascript"></script>
 <!-- ChartJS 1.0.1 -->
 <script src="<?php echo base_url('assets/AdminLTE-2.0.5/plugins/chartjs/Chart.min.js') ?>" type="text/javascript"></script>
-
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="<?php echo base_url('assets/AdminLTE-2.0.5/dist/js/pages/dashboard2.js') ?>" type="text/javascript"></script>
-
-<!-- AdminLTE for demo purposes -->
-<script src="<?php echo base_url('assets/AdminLTE-2.0.5/dist/js/demo.js') ?>" type="text/javascript"></script>
 
 <?php
 $this->load->view('template/foot');

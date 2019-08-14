@@ -16,22 +16,25 @@ class Tabel_suratmasuk_model extends CI_Model
     }
 
     // datatables
-    function json() {
-        $this->datatables->select('tabel_suratdispo.no,tabel_suratdispo.seksi,tabel_suratdispo.sifat,tabel_pegawai.nama as pelaksana,tabel_suratdispo.keterangan,tabel_suratdispo.catatan,tabel_suratdispo.proses,tabel_suratmasuk.id,tgl_surat,no_surat,no_sekre,seksi.ket,hal_surat,asal_surat');
-        $this->datatables->join('tabel_suratdispo', 'tabel_suratmasuk.id = tabel_suratdispo.id_surat_masuk','left');
-        $this->datatables->join('tabel_pegawai','tabel_pegawai.ip = tabel_suratdispo.pelaksana','left');
-        $this->datatables->join('seksi', 'tabel_suratdispo.seksi = seksi.kode','left');
+    function json($fungsi,$id) {
+        $this->db->select('tabel_suratmasuk.id as id_surat,tabel_suratdispo.no,tabel_suratdispo.waktu,tabel_suratdispo.seksi,tabel_suratdispo.sifat,tabel_pegawai.ip as pelaksana,tabel_suratdispo.keterangan,tabel_suratdispo.catatan,tabel_suratdispo.proses,tabel_suratmasuk.id,tgl_surat,no_surat,no_sekre,seksi.ket,hal_surat,asal_surat');
+        $this->db->join('tabel_suratdispo', 'tabel_suratmasuk.id = tabel_suratdispo.id_surat_masuk','left');
+        $this->db->join('tabel_pegawai','tabel_pegawai.ip = tabel_suratdispo.pelaksana','left');
+        $this->db->join('seksi', 'tabel_suratdispo.seksi = seksi.kode','left');
+        if ($fungsi=='edit') {
+            $this->db->where('tabel_suratmasuk.id', $id);
+        }
         $this->datatables->from('tabel_suratmasuk');
         return $this->datatables->generate();
     }
 
     function jsontugas($pelaksana)
     {
-        $this->datatables->select('tabel_suratdispo.no,tabel_suratdispo.seksi,tabel_suratdispo.sifat,tabel_pegawai.nama as pelaksana,tabel_suratdispo.keterangan,tabel_suratdispo.catatan,tabel_suratdispo.proses,tabel_suratmasuk.id,tgl_surat,no_surat,no_sekre,seksi.ket,hal_surat,asal_surat');
-        $this->datatables->join('tabel_suratdispo','tabel_suratdispo.id_surat_masuk = tabel_suratmasuk.id');
-        $this->datatables->join('tabel_pegawai','tabel_pegawai.ip = tabel_suratdispo.pelaksana','left');
-        $this->datatables->join('seksi', 'tabel_suratdispo.seksi = seksi.kode','left');
-        $this->datatables->where('pelaksana', $pelaksana);
+        $this->db->select('tabel_suratdispo.no,tabel_suratdispo.seksi,tabel_suratdispo.sifat,tabel_pegawai.nama as pelaksana,tabel_suratdispo.keterangan,tabel_suratdispo.catatan,tabel_suratdispo.proses,tabel_suratmasuk.id,tgl_surat,no_surat,no_sekre,seksi.ket,hal_surat,asal_surat');
+        $this->db->join('tabel_suratdispo','tabel_suratdispo.id_surat_masuk = tabel_suratmasuk.id');
+        $this->db->join('tabel_pegawai','tabel_pegawai.ip = tabel_suratdispo.pelaksana','left');
+        $this->db->join('seksi', 'tabel_suratdispo.seksi = seksi.kode','left');
+        $this->db->where('pelaksana', $pelaksana);
         $this->datatables->from('tabel_suratmasuk');
         return $this->datatables->generate();
     }
@@ -134,7 +137,8 @@ class Tabel_suratmasuk_model extends CI_Model
             'no_surat' => $data['no_surat'],
             'no_sekre' => $data['no_sekre'],
             'hal_surat' => $data['hal_surat'],
-            'asal_surat' => $data['asal_surat']
+            'asal_surat' => $data['asal_surat'],
+            'perekam' => $data['pembuat'],
         );
 
         $this->db->trans_start();

@@ -20,10 +20,10 @@
              folder instead of downloading all of them to reduce the load. -->
         <link href="<?php echo base_url('assets/AdminLTE-2.0.5/dist/css/skins/_all-skins.min.css') ?>" rel="stylesheet" type="text/css" />
         <!-- Datatables -->
-        <link href="<?php echo base_url('assets/datatables/dataTables.bootstrap.css') ?>" rel="stylesheet" type="text/css" />
         <link href="<?php echo base_url('assets/js/jquery-ui.css') ?>" rel="stylesheet" type="text/css" />
-        <link rel="stylesheet" href="<?php echo base_url('assets/datatables/dataTables.bootstrap.css') ?>"/>
         <link rel="stylesheet" href="<?php echo base_url('assets/datatables/dataTables.bootstrap.css') ?>"/>
         <link rel="stylesheet" href="<?php echo base_url('assets/jquery.imgareaselect/css/imgareaselect-animated.css') ?>"/>
         <link rel="stylesheet" href="<?php echo base_url('assets/jquery.imgareaselect/css/imgareaselect-default.css') ?>"/>
         <link rel="stylesheet" href="<?php echo base_url('assets/jquery.imgareaselect/css/imgareaselect-deprecated.css') ?>"/>
+        <link rel="stylesheet" href="<?php echo base_url('assets/bootstrap/css/pace.css') ?>"/>
+        

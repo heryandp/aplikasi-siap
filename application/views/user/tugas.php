@@ -43,7 +43,7 @@ $this->load->view('template/sidebar');
                 <div class="panel panel-default">
                   <div class="panel-heading">Daftar</div>
                   <div class="panel-body">
-                    <table class="table table-bordered table-striped" id="mytable">
+                    <table class="table table-bordered table-striped" id="example">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -78,6 +78,7 @@ $this->load->view('tabel_suratmasuk/modal');
 <script src="<?php echo base_url('assets/datatables/jquery.dataTables.js') ?>"></script>
 <script src="<?php echo base_url('assets/datatables/dataTables.bootstrap.js') ?>"></script>
 <script type="text/javascript">
+    // New Datatables
     $(document).ready(function() {
         $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
         {
@@ -92,25 +93,13 @@ $this->load->view('tabel_suratmasuk/modal');
             };
         };
 
-        var t = $("#mytable").DataTable({
-            initComplete: function() {
-                var api = this.api();
-                $('#mytable_filter input')
-                        .off('.DT')
-                        .on('keyup.DT', function(e) {
-                            if (e.keyCode == 13) {
-                                api.search(this.value).draw();
-                    }
-                });
-            },
-            oLanguage: {
-                sProcessing: "memuat..."
-            },
-            processing: true,
-            serverSide: true,
-            ajax: {"url": "tabel_suratmasuk/jsontugas", "type": "POST"},
-            columns: [
-                {
+        var table = $('#example').DataTable( {
+            "ajax": "tabel_suratmasuk/jsontugas",
+            "serverside": true,
+            "responsive": true,
+            "deferRender": true,
+            "columns": [
+               {
                     "data": "id",
                     "orderable": false,
                     "className" : "text-center",
@@ -142,17 +131,18 @@ $this->load->view('tabel_suratmasuk/modal');
                     "className" : "text-center",
                 }
             ],
-            order: [[0, 'desc']],
+            "order": [[0, 'desc']],
             rowCallback: function(row, data, iDisplayIndex) {
-                var info = this.fnPagingInfo();
-                var page = info.iPage;
-                var length = info.iLength;
-                var index = page * length + (iDisplayIndex + 1);
-                $('td:eq(0)', row).html(index);
+                        var info = this.fnPagingInfo();
+                        var page = info.iPage;
+                        var length = info.iLength;
+                        var index = page * length + (iDisplayIndex + 1);
+                        $('td:eq(0)', row).html(index);
             }
-        });
-        $('#mytable tbody').on( 'click', 'button', function () {
-            var data = t.row( $(this).parents('tr') ).data();
+        } );
+        
+        $('#example tbody').on( 'click', 'button', function () {
+            var data = table.row( $(this).parents('tr') ).data();
             // Modal Detil
             $('#dispo-id').val(data['id']);
             $('#modal-no,#dispo-no').val(data['no']);
@@ -184,10 +174,8 @@ $this->load->view('tabel_suratmasuk/modal');
             document.getElementById("selesai-bro").href='tabel_suratmasuk/done/'+data['id'];
             document.getElementById("dispo-form").action='tabel_suratmasuk/dispo/add/'+data['id'];
             document.getElementById("edit-form").action='tabel_suratmasuk/update/'+data['id'];
+            } );
         } );
-
-    });
-
 </script>
 <?php 
 $this->load->view('template/js');

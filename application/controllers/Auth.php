@@ -15,9 +15,7 @@ class Auth extends CI_Controller
 		$this->load->database();
 		$this->load->library(['ion_auth', 'form_validation']);
 		$this->load->helper(['url', 'language']);
-
 		$this->form_validation->set_error_delimiters($this->config->item('error_start_delimiter', 'ion_auth'), $this->config->item('error_end_delimiter', 'ion_auth'));
-
 		$this->lang->load('auth');
 		$this->load->model('Ion_auth_model');
 		$this->load->model('Grab_model');
@@ -85,10 +83,12 @@ class Auth extends CI_Controller
 				$this->session->set_flashdata('message', $this->ion_auth->messages());
 
 				//ambil Nama depan dan belakang
-				$data = $this->Ion_auth_model->getnama($this->input->post('identity'));
+				$data = $this->Ion_auth_model->getdetail($this->input->post('identity'));
+				$avatar = $data->avatar;
 				$email = $data->email;
 				$name1 = $data->first_name;
 				$name2 = $data->first_name.' '.$data->last_name;
+				$this->session->set_userdata('avatar', $avatar);
 				$this->session->set_userdata('emailbro', $email);
 				$this->session->set_userdata('firstname', $name1);
 				$this->session->set_userdata('fullname', $name2);

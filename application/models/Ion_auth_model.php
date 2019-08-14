@@ -266,12 +266,21 @@ class Ion_auth_model extends CI_Model
 		$this->trigger_events('model_constructor');
 	}
 
-	public function getnama($email){
-		$this->db->select('first_name,last_name,email');
+	public function getdetail($email){
+		$this->db->select('first_name,last_name,email,avatar');
         $query = $this->db->get_where('users',['email' => $email])->row();
         return $query;
 	}
 	
+	public function update_avatar($id,$avatar)
+	{
+		$data = array(
+			'avatar' => $avatar
+		);
+
+		$this->db->where('email', $id);
+		$this->db->update('users', $data);
+	}
 	/**
 	 * Getter to the DB connection used by Ion Auth
 	 * May prove useful for debugging
