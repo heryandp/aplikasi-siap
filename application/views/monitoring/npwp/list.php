@@ -78,7 +78,7 @@ $this->load->view('template/sidebar');
                     <th>No</th>
                     <th>Nama</th>
                     <th>NPWP</th>
-                    <th>Tgl BPS</th>
+                    <th>BPS</th>
                     <th>Alasan</th>
                     <th>Telepon</th>
                     <th>Status</th>

@@ -11,7 +11,7 @@ class Monitoring_model extends CI_Model {
    public function json_npwp($kode)
    {
         if ($kode =='5321') {
-          $this->db->select('tabel_dafnom_hapus.idKasus as idKasus2,tabel_dafnom.idKasus,tabel_dafnom_hapus.npwp,tabel_dafnom_hapus.usulan,tabel_dafnom_hapus.tgl_usulan,tabel_dafnom_hapus.alasan,tabel_dafnom_hapus.telepon,tabel_mfwp.nama,tabel_sp2.no as sp2,tabel_sp2.tgl as tgl_sp2,tabel_lhp.no_lhp as lhp,tabel_dafnom_hapus.hasil');
+          $this->db->select('tabel_dafnom_hapus.idKasus as idKasus2,tabel_dafnom.idKasus,tabel_dafnom_hapus.npwp,tabel_dafnom_hapus.nama,tabel_dafnom_hapus.usulan,tabel_dafnom_hapus.tgl_usulan,tabel_dafnom_hapus.alasan,tabel_dafnom_hapus.telepon,tabel_sp2.no as sp2,tabel_sp2.tgl as tgl_sp2,tabel_lhp.no_lhp as lhp,tabel_dafnom_hapus.hasil');
           $this->db->join('tabel_mfwp', 'tabel_mfwp.npwp = tabel_dafnom_hapus.npwp', 'left');
           $this->db->join('tabel_dafnom', 'tabel_dafnom_hapus.np2 = tabel_dafnom.np2', 'left');
           $this->db->join('tabel_sp2', 'tabel_sp2.idKasus = tabel_dafnom.idKasus', 'left');
@@ -20,7 +20,7 @@ class Monitoring_model extends CI_Model {
           $this->datatables->from('tabel_dafnom_hapus');
           return $this->datatables->generate();
         } else {
-          $this->db->select('tabel_dafnom_hapus.idKasus as idKasus2,tabel_dafnom.idKasus,tabel_dafnom_hapus.npwp,tabel_dafnom_hapus.usulan,tabel_dafnom_hapus.tgl_usulan,tabel_dafnom_hapus.telepon,tabel_mfwp.nama,tabel_sp2.no as sp2,tabel_sp2.tgl as tgl_sp2,tabel_lhp.no_lhp as lhp,tabel_dafnom_hapus.hasil');
+          $this->db->select('tabel_dafnom_hapus.idKasus as idKasus2,tabel_dafnom.idKasus,tabel_dafnom_hapus.npwp,tabel_dafnom_hapus.nama,tabel_dafnom_hapus.usulan,tabel_dafnom_hapus.tgl_usulan,tabel_dafnom_hapus.telepon,tabel_sp2.no as sp2,tabel_sp2.tgl as tgl_sp2,tabel_lhp.no_lhp as lhp,tabel_dafnom_hapus.hasil');
           $this->db->join('tabel_mfwp', 'tabel_mfwp.npwp = tabel_dafnom_hapus.npwp', 'left');
           $this->db->join('tabel_dafnom', 'tabel_dafnom_hapus.np2 = tabel_dafnom.np2', 'left');
           $this->db->join('tabel_sp2', 'tabel_sp2.idKasus = tabel_dafnom.idKasus', 'left');
@@ -43,6 +43,14 @@ class Monitoring_model extends CI_Model {
             $this->db->where('idKasus', $data['id']);
             $this->db->update('tabel_dafnom_hapus', $update);
        }
+   }
+
+   public function get_dispo($id)
+   {
+     $this->db->select('tabel_dafnom_hapus.nama,tabel_dafnom_hapus.npwp,alamat,usulan,tgl_usulan');
+     $this->db->join('tabel_mfwp','tabel_dafnom_hapus.npwp = tabel_mfwp.npwp','left');
+     $this->db->where('idKasus',$id);
+     return $this->db->get('tabel_dafnom_hapus')->result();
    }
 
 }

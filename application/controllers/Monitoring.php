@@ -7,6 +7,7 @@ class Monitoring extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('Monitoring_model');
+		$this->load->model('Tabel_suratmasuk_model');
 		$this->load->model('ion_auth_model');
 		$this->load->library('ion_auth');
 		if($this->ion_auth->logged_in()===FALSE)
@@ -33,6 +34,7 @@ class Monitoring extends CI_Controller {
 			'np2' => $np2,
 			'kode' => '5321',
 			'npwp' => $_POST['npwp'],
+			'nama' => $_POST['nama'],
 			'usulan' => $_POST['no-bps'],
 			'tgl_usulan' => $_POST['tgl-bps'],
 			'alasan' => $_POST['alasan'],
@@ -64,11 +66,17 @@ class Monitoring extends CI_Controller {
 		redirect('monitoring/npwp','refresh');
 	}
 
+	public function dispo_cetak($id)
+    {
+        $data['cetak'] = $this->Monitoring_model->get_dispo($id);
+        // var_dump($data['cetak']->nama);
+        $data['pelaksana'] = $this->Tabel_suratmasuk_model->pelaksana();
+        $this->load->view('template/cetak/dispo_hapus',$data);
+
+    }
+
 	public function pkp()
 	{
 		$this->load->view('monitoring/pkp/list');
 	}
 }
-
-/* End of file Konfigurasi.php */
-/* Location: ./application/controllers/Konfigurasi.php */
