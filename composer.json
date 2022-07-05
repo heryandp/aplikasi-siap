@@ -23,7 +23,7 @@
 		"phpoffice/phpspreadsheet": "^1.6",
 		"phpoffice/phpword": "^0.16.0",
 		"tecnickcom/tcpdf": "^6.2",
-		"dompdf/dompdf": "^0.8.3",
+		"dompdf/dompdf": "^2.0.0",
 		"symfony/finder": "^4.2",
 		"symfony/polyfill-ctype": "^1.11",
 		"ncjoes/office-converter": "^1.0",
